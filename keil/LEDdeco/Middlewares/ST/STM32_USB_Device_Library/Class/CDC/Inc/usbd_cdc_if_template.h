@@ -1,10 +1,10 @@
 /**
   ******************************************************************************
-  * @file    usbd_customhid_if_template.h
+  * @file    usbd_cdc_if_template.h
   * @author  MCD Application Team
   * @version V2.4.2
   * @date    11-December-2015
-  * @brief   Header for usbd_customhid_if_template.c file.
+  * @brief   Header for usbd_cdc_if_template.c file.
   ******************************************************************************
   * @attention
   *
@@ -19,34 +19,35 @@
   * Unless required by applicable law or agreed to in writing, software 
   * distributed under the License is distributed on an "AS IS" BASIS, 
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  * See the License for th?
-  e specific language governing permissions and
+  * See the License for the specific language governing permissions and
   * limitations under the License.
   *
   ******************************************************************************
-  */ 
+  */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __USBD_CUSTOMHID_IF_TEMPLATE_H
-#define __USBD_CUSTOMHID_IF_TEMPLATE_H
+#ifndef __USBD_CDC_IF_TEMPLATE_H
+#define __USBD_CDC_IF_TEMPLATE_H
 
 #ifdef __cplusplus
  extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "usbd_customhid.h"
+#include "usbd_cdc.h"
 
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
+
+extern USBD_CDC_ItfTypeDef  USBD_CDC_Template_fops;
+
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
-extern USBD_CUSTOM_HID_ItfTypeDef USBD_CustomHID_template_fops;
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* __USBD_CUSTOMHID_IF_TEMPLATE_H */
+#endif /* __USBD_CDC_IF_TEMPLATE_H */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
