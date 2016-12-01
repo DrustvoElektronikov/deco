@@ -9,6 +9,10 @@
 #include "stm32f0xx_hal.h"
 #include "usb_device.h"
 #include "led.h"
+#include "CDC_receiver.h"
+#include <string.h>
+#include "command.h" 
+
 
 /* Private variables ---------------------------------------------------------*/
 TIM_HandleTypeDef htim3;
@@ -46,6 +50,12 @@ int main(void)
   /* Infinite loop */
   while (1)
   {
+		if (is_line_received())
+		{
+//     Process received line
+
+			cmd_proc(get_line_buffer());
+		}
 		LED_set(b);
 		b<<=1;
 		if (b==0) b = 1;
