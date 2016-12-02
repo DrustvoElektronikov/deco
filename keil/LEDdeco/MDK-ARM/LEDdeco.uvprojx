@@ -547,6 +547,16 @@
               <FileType>1</FileType>
               <FilePath>..\Src\command.c</FilePath>
             </File>
+            <File>
+              <FileName>audio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\audio.c</FilePath>
+            </File>
+            <File>
+              <FileName>sequencer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\sequencer.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

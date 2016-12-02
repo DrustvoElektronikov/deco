@@ -38,11 +38,13 @@
 #include "CDC_receiver.h"
 #include <string.h>
 #include "command.h" 
+#include "audio.h"
+#include "sequencer.h"
 
 
 /* Private variables ---------------------------------------------------------*/
 TIM_HandleTypeDef htim3;
-
+TIM_HandleTypeDef htim14;
 UART_HandleTypeDef huart2;
 
 /* Private function prototypes -----------------------------------------------*/
@@ -51,14 +53,28 @@ void Error_Handler(void);
 static void MX_TIM3_Init(void);
 static void MX_USART2_UART_Init(void);                                    
 void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
-                                
+static void MX_TIM14_Init(void);
+                               
 
 /* Private function prototypes -----------------------------------------------*/
 
+/*******************************************************************************
+********************************************************************************
 
+
+    ##     ##    ###    #### ##    ## 
+    ###   ###   ## ##    ##  ###   ## 
+    #### ####  ##   ##   ##  ####  ## 
+    ## ### ## ##     ##  ##  ## ## ## 
+    ##     ## #########  ##  ##  #### 
+    ##     ## ##     ##  ##  ##   ### 
+    ##     ## ##     ## #### ##    ## 
+
+
+*/
 int main(void)
 {
-	uint8_t b=1;
+	uint8_t b=1, i=0;
 
   /* MCU Configuration----------------------------------------------------------*/
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
@@ -70,9 +86,11 @@ int main(void)
   /* Initialize peripherals */
   LED_Init();
   MX_TIM3_Init();
+	MX_TIM14_Init();
   MX_USART2_UART_Init();
   MX_USB_DEVICE_Init();
-
+	Audio_Init(); 
+	
   /* Infinite loop */
   while (1)
   {
@@ -85,11 +103,21 @@ int main(void)
 		LED_set(b);
 		b<<=1;
 		if (b==0) b = 1;
+		//Audio_Play(MIDI2Hz(i++)); 
+		//Audio_Play(0);
 		HAL_Delay(50);
   }
 }
 
+
+
 /** System Clock Configuration
+
+     __                                                _       
+    (_      _ |_  _  _     _ |  _   _ |     _  _   _  (_ .  _  
+    __) \/ _) |_ (- |||   (_ | (_) (_ |(   (_ (_) | ) |  | (_) 
+        /                                                  _/  
+                                      
 */
 void SystemClock_Config(void)
 {
@@ -145,7 +173,15 @@ void SystemClock_Config(void)
   HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
 }
 
-/* TIM3 init function */
+/* TIM3 init function 
+
+
+    ___                __               
+     |  .  _   _  _     _)   .  _  . |_ 
+     |  | ||| (- |     __)   | | ) | |_ 
+                                        
+
+*/
 static void MX_TIM3_Init(void)
 {
 
@@ -202,6 +238,30 @@ static void MX_USART2_UART_Init(void)
   }
 
 }
+
+
+
+/* TIM14 init function */
+void MX_TIM14_Init(void)
+{
+
+  htim14.Instance = TIM14;
+  htim14.Init.Prescaler = 48;
+  htim14.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim14.Init.Period = 1000;
+  htim14.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  HAL_TIM_Base_Init(&htim14);
+
+}
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+	if (htim->Instance==TIM14) //check if the interrupt comes from TIM3
+		{
+			Sequencer();  /// periodically call sequencer
+		}
+}
+
 
 
 
