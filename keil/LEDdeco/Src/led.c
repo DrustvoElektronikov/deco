@@ -51,6 +51,9 @@ LED_conf_t LED_conf[8] =
 };
 
 
+static uint8_t LED_currentIntensity=0;
+static uint8_t LED_state = 0, LED_Oldstate = 0;
+static uint16_t LED_fader = 0, fader_cnt = 0;
 
 /** Configure LED pins as 
         * OD Output, no Pullups
@@ -81,10 +84,7 @@ void LED_Init(void)
 	}
 }
 
- 
-
-
-void LED_set(uint8_t led)
+void LED_set_GPIO(uint8_t led)
 {
 	uint8_t b = 0x01;
 	int i;
@@ -95,5 +95,46 @@ void LED_set(uint8_t led)
 		b<<=1;
 	}
 }
+
+static uint8_t LED_IntensityCounter = 0;
+
+
+void LED_set(uint8_t led)
+{
+	LED_Oldstate = LED_state;
+	LED_state = led;
+	fader_cnt = 0;
+	LED_IntensityCounter = 0;
+	LED_currentIntensity = 0;
+}
+
  
- 
+void LED_UpdateIntensity(void)
+{
+	if (fader_cnt < LED_fader) 
+		fader_cnt++;
+	else
+	{
+		fader_cnt = 0;
+		if (LED_currentIntensity < 100) LED_currentIntensity ++;
+	}
+	
+	if (LED_IntensityCounter < 100) 
+		LED_IntensityCounter ++; 
+	else 
+		LED_IntensityCounter = 0;
+	
+	if (LED_IntensityCounter < LED_currentIntensity) 
+		LED_set_GPIO(LED_state); 
+	else
+		LED_set_GPIO(LED_Oldstate);
+}
+
+
+void LED_SetFader(uint16_t fader)
+{
+	LED_fader = fader;
+}
+
+
+

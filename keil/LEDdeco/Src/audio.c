@@ -46,7 +46,7 @@
 
 extern TIM_HandleTypeDef htim3;
 
-
+static uint16_t AudioVolume = 500;
 
 const uint16_t MidiFrequencies[128-24] = 
 {
@@ -188,7 +188,7 @@ void Audio_Init(void)
   HAL_TIMEx_MasterConfigSynchronization(&htim3, &sMasterConfig);
 
   sConfigOC.OCMode = TIM_OCMODE_PWM1;
-	sConfigOC.Pulse = htim3.Init.Period >>2 ; // 50% duty cycle
+	sConfigOC.Pulse = AudioVolume ; // 
   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
   sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
   HAL_TIM_PWM_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_1);
@@ -205,7 +205,7 @@ void Audio_Play(uint16_t frequency)
 		htim3.Init.Period = 1000000 / frequency; 	// set period value
 		HAL_TIM_PWM_Init(&htim3);
     sConfigOC.OCMode = TIM_OCMODE_PWM1;
-		sConfigOC.Pulse = htim3.Init.Period >>2 ; // 50% duty cycle
+		sConfigOC.Pulse = AudioVolume ; // 
 		sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
 		sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
 		HAL_TIM_PWM_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_1);
@@ -225,3 +225,14 @@ uint16_t MIDI2Hz(uint8_t note)
 }
 
 
+void Audio_PlayMidiNote(uint8_t note)
+{
+	Audio_Play(MIDI2Hz(note));
+}
+
+
+
+void Audio_Volume(uint16_t vol)
+{
+	AudioVolume = vol;
+}

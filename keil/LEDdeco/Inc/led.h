@@ -45,6 +45,9 @@ typedef struct
 
 void LED_Init(void);
 void LED_set(uint8_t led);
+void LED_UpdateIntensity(void);
+void LED_SetFader(uint16_t fader);
+
 
 #endif
 

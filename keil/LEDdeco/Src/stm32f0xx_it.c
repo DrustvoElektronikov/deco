@@ -40,6 +40,7 @@
 extern PCD_HandleTypeDef hpcd_USB_FS;
 extern UART_HandleTypeDef huart2;
 extern TIM_HandleTypeDef htim14;
+extern TIM_HandleTypeDef htim16;
 
 /******************************************************************************/
 /*            Cortex-M0 Processor Interruption and Exception Handlers         */ 
@@ -120,6 +121,14 @@ void TIM14_IRQHandler(void)
   HAL_TIM_IRQHandler(&htim14);
 }
 
+
+/**
+* @brief This function handles TIM14 global interrupt.
+*/
+void TIM16_IRQHandler(void)
+{  
+  HAL_TIM_IRQHandler(&htim16);
+}
 
 
 

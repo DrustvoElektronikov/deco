@@ -16,18 +16,12 @@
 
 #include "stm32f0xx.h"                  // Device header
 
-#ifdef __cplusplus
- extern "C" {
-#endif
-
 void Audio_Init(void);
 void Audio_Play(uint16_t frequency);
 uint16_t MIDI2Hz(uint8_t note);
+void Audio_PlayMidiNote(uint8_t note);
+void Audio_Volume(uint16_t vol);
 
-    
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* __AUDIO_H__ */
 

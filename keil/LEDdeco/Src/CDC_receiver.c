@@ -61,11 +61,8 @@ int line_idx = 0;
  */
 void process_rx_char(char rx_char)
 {
-#ifdef AUTORUN
-		abort_autorun();
-#endif
-	
-    if (rx_char == CR)  rx_char = LF;   
+
+  	if (rx_char == CR)  rx_char = LF;   
     if (rx_char == BACKSPACE  ||  rx_char == DEL) 
     {    // process backspace
       	if (line_idx != 0)  

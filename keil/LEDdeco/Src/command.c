@@ -37,7 +37,9 @@
 #include <string.h>  // strcmp
 #include <ctype.h>   // toupper
 #include <stdlib.h>
+
 #include "usbd_cdc_if.h"
+#include "CDC_receiver.h"
 
 
 #define MAX_CMD_LEN 128
@@ -56,19 +58,9 @@ char newline [1 + MAX_CMD_LEN];
 enum
   {
   		CMD_LIST,
-		CMD_ERASE,
-		CMD_MOVE,
-		CMD_BLINK,
-		CMD_TEST,
-		CMD_INIT,
 		CMD_RUN,
-		CMD_SEND,
-		CMD_FADE,
-		CMD_ID,
+		CMD_STOP,
 		CMD_BEEP,
-		CMD_SOUND,
-		CMD_NOTE,
-		CMD_PAUSE,
 // Add more 
 CMD_LAST
 };
@@ -86,56 +78,26 @@ int id;
 */
 const char helptext[] = 
 "Commands:\n\r"		" LIST \n\r"
-		" ERASE \n\r"
-		" MOVE \n\r"
-		" BLINK \n\r"
-		" TEST \n\r"
-		" INIT \n\r"
 		" RUN \n\r"
-		" SEND \n\r"
-		" FADE \n\r"
-		" ID \n\r"
+		" STOP \n\r"
 		" BEEP \n\r"
-		" SOUND \n\r"
-		" NOTE \n\r"
-		" PAUSE \n\r"
 ;
 /**
 *
 */
 const struct cmd_st cmd_tbl [] =
 {    { "LIST", 	 CMD_LIST,  }, 
-    { "ERASE", 	 CMD_ERASE,  }, 
-    { "MOVE", 	 CMD_MOVE,  }, 
-    { "BLINK", 	 CMD_BLINK,  }, 
-    { "TEST", 	 CMD_TEST,  }, 
-    { "INIT", 	 CMD_INIT,  }, 
     { "RUN", 	 CMD_RUN,  }, 
-    { "SEND", 	 CMD_SEND,  }, 
-    { "FADE", 	 CMD_FADE,  }, 
-    { "ID", 	 CMD_ID,  }, 
+    { "STOP", 	 CMD_STOP,  }, 
     { "BEEP", 	 CMD_BEEP,  }, 
-    { "SOUND", 	 CMD_SOUND,  }, 
-    { "NOTE", 	 CMD_NOTE,  }, 
-    { "PAUSE", 	 CMD_PAUSE,  }, 
 };
 
 #define CMD_TBL_LEN (sizeof (cmd_tbl) / sizeof (cmd_tbl [0]))
 
 /********** Command functions ***********/void cmd_LIST(char *argstr_buf);
-void cmd_ERASE(char *argstr_buf);
-void cmd_MOVE(char *argstr_buf);
-void cmd_BLINK(char *argstr_buf);
-void cmd_TEST(char *argstr_buf);
-void cmd_INIT(char *argstr_buf);
 void cmd_RUN(char *argstr_buf);
-void cmd_SEND(char *argstr_buf);
-void cmd_FADE(char *argstr_buf);
-void cmd_ID(char *argstr_buf);
+void cmd_STOP(char *argstr_buf);
 void cmd_BEEP(char *argstr_buf);
-void cmd_SOUND(char *argstr_buf);
-void cmd_NOTE(char *argstr_buf);
-void cmd_PAUSE(char *argstr_buf);
 void cmd_unknown(char *argstr_buf);
 
 
@@ -226,56 +188,16 @@ function invoked here.
       cmd_LIST(argstr_buf);
     break;
 
-    case CMD_ERASE:
-      cmd_ERASE(argstr_buf);
-    break;
-
-    case CMD_MOVE:
-      cmd_MOVE(argstr_buf);
-    break;
-
-    case CMD_BLINK:
-      cmd_BLINK(argstr_buf);
-    break;
-
-    case CMD_TEST:
-      cmd_TEST(argstr_buf);
-    break;
-
-    case CMD_INIT:
-      cmd_INIT(argstr_buf);
-    break;
-
     case CMD_RUN:
       cmd_RUN(argstr_buf);
     break;
 
-    case CMD_SEND:
-      cmd_SEND(argstr_buf);
-    break;
-
-    case CMD_FADE:
-      cmd_FADE(argstr_buf);
-    break;
-
-    case CMD_ID:
-      cmd_ID(argstr_buf);
+    case CMD_STOP:
+      cmd_STOP(argstr_buf);
     break;
 
     case CMD_BEEP:
       cmd_BEEP(argstr_buf);
-    break;
-
-    case CMD_SOUND:
-      cmd_SOUND(argstr_buf);
-    break;
-
-    case CMD_NOTE:
-      cmd_NOTE(argstr_buf);
-    break;
-
-    case CMD_PAUSE:
-      cmd_PAUSE(argstr_buf);
     break;
 
     case CMD_LAST:
@@ -290,96 +212,6 @@ function invoked here.
    * @retval None
    */
 void cmd_LIST(char *argstr_buf)
-
-{
-  
-  // add code here --------
-  
-  
-  
-}
-  
-  
-  /**
-   * CMD_ERASE
-   * @brief 
-   * @param Arguments string from ERASE command
-   * @param None
-   * @retval None
-   */
-void cmd_ERASE(char *argstr_buf)
-
-{
-  
-  // add code here --------
-  
-  
-  
-}
-  
-  
-  /**
-   * CMD_MOVE
-   * @brief 
-   * @param Arguments string from MOVE command
-   * @param None
-   * @retval None
-   */
-void cmd_MOVE(char *argstr_buf)
-
-{
-  
-  // add code here --------
-  
-  
-  
-}
-  
-  
-  /**
-   * CMD_BLINK
-   * @brief 
-   * @param Arguments string from BLINK command
-   * @param None
-   * @retval None
-   */
-void cmd_BLINK(char *argstr_buf)
-
-{
-  
-  // add code here --------
-  
-  
-  
-}
-  
-  
-  /**
-   * CMD_TEST
-   * @brief 
-   * @param Arguments string from TEST command
-   * @param None
-   * @retval None
-   */
-void cmd_TEST(char *argstr_buf)
-
-{
-  
-  // add code here --------
-  
-  
-  
-}
-  
-  
-  /**
-   * CMD_INIT
-   * @brief 
-   * @param Arguments string from INIT command
-   * @param None
-   * @retval None
-   */
-void cmd_INIT(char *argstr_buf)
 
 {
   
@@ -409,49 +241,13 @@ void cmd_RUN(char *argstr_buf)
   
   
   /**
-   * CMD_SEND
+   * CMD_STOP
    * @brief 
-   * @param Arguments string from SEND command
+   * @param Arguments string from STOP command
    * @param None
    * @retval None
    */
-void cmd_SEND(char *argstr_buf)
-
-{
-  
-  // add code here --------
-  
-  
-  
-}
-  
-  
-  /**
-   * CMD_FADE
-   * @brief 
-   * @param Arguments string from FADE command
-   * @param None
-   * @retval None
-   */
-void cmd_FADE(char *argstr_buf)
-
-{
-  
-  // add code here --------
-  
-  
-  
-}
-  
-  
-  /**
-   * CMD_ID
-   * @brief 
-   * @param Arguments string from ID command
-   * @param None
-   * @retval None
-   */
-void cmd_ID(char *argstr_buf)
+void cmd_STOP(char *argstr_buf)
 
 {
   
@@ -479,61 +275,7 @@ void cmd_BEEP(char *argstr_buf)
   
 }
   
-  
-  /**
-   * CMD_SOUND
-   * @brief 
-   * @param Arguments string from SOUND command
-   * @param None
-   * @retval None
-   */
-void cmd_SOUND(char *argstr_buf)
 
-{
-  
-  // add code here --------
-  
-  
-  
-}
-  
-  
-  /**
-   * CMD_NOTE
-   * @brief 
-   * @param Arguments string from NOTE command
-   * @param None
-   * @retval None
-   */
-void cmd_NOTE(char *argstr_buf)
-
-{
-  
-  // add code here --------
-  
-  
-  
-}
-  
-  
-  /**
-   * CMD_PAUSE
-   * @brief 
-   * @param Arguments string from PAUSE command
-   * @param None
-   * @retval None
-   */
-void cmd_PAUSE(char *argstr_buf)
-
-{
-  
-  // add code here --------
-  
-  
-  
-}
-  
-  
   void cmd_unknown(char * argstr_buf)
 {
 	char txt[64];

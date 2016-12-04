@@ -45,6 +45,7 @@
 /* Private variables ---------------------------------------------------------*/
 TIM_HandleTypeDef htim3;
 TIM_HandleTypeDef htim14;
+TIM_HandleTypeDef htim16;
 UART_HandleTypeDef huart2;
 
 /* Private function prototypes -----------------------------------------------*/
@@ -54,6 +55,7 @@ static void MX_TIM3_Init(void);
 static void MX_USART2_UART_Init(void);                                    
 void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 static void MX_TIM14_Init(void);
+static void MX_TIM16_Init(void);
                                
 
 /* Private function prototypes -----------------------------------------------*/
@@ -74,7 +76,7 @@ static void MX_TIM14_Init(void);
 */
 int main(void)
 {
-	uint8_t b=1, i=0;
+//	uint8_t b=1;
 
   /* MCU Configuration----------------------------------------------------------*/
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
@@ -87,25 +89,21 @@ int main(void)
   LED_Init();
   MX_TIM3_Init();
 	MX_TIM14_Init();
+	MX_TIM16_Init();
   MX_USART2_UART_Init();
   MX_USB_DEVICE_Init();
 	Audio_Init(); 
+	Sequencer_Init();
+	HAL_TIM_Base_Start_IT(&htim16); // start intensity timer
 	
   /* Infinite loop */
   while (1)
   {
 		if (is_line_received())
 		{
-//     Process received line
-
-			cmd_proc(get_line_buffer());
+			cmd_proc(get_line_buffer());  //     Process received line
 		}
-		LED_set(b);
-		b<<=1;
-		if (b==0) b = 1;
-		//Audio_Play(MIDI2Hz(i++)); 
-		//Audio_Play(0);
-		HAL_Delay(50);
+		
   }
 }
 
@@ -245,6 +243,13 @@ static void MX_USART2_UART_Init(void)
 void MX_TIM14_Init(void)
 {
 
+	/* Peripheral clock enable */
+    __TIM14_CLK_ENABLE();
+  /* Peripheral interrupt init*/
+    HAL_NVIC_SetPriority(TIM14_IRQn, 0, 0);
+    HAL_NVIC_EnableIRQ(TIM14_IRQn);
+
+	
   htim14.Instance = TIM14;
   htim14.Init.Prescaler = 48;
   htim14.Init.CounterMode = TIM_COUNTERMODE_UP;
@@ -254,12 +259,40 @@ void MX_TIM14_Init(void)
 
 }
 
+
+/* TIM14 init function */
+void MX_TIM16_Init(void)
+{
+
+	/* Peripheral clock enable */
+    __TIM16_CLK_ENABLE();
+  /* Peripheral interrupt init*/
+    HAL_NVIC_SetPriority(TIM16_IRQn, 0, 0);
+    HAL_NVIC_EnableIRQ(TIM16_IRQn);
+
+	
+  htim16.Instance = TIM16;
+  htim16.Init.Prescaler = 48;
+  htim16.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim16.Init.Period = 10;
+  htim16.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  HAL_TIM_Base_Init(&htim16);
+
+}
+
+
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
 	if (htim->Instance==TIM14) //check if the interrupt comes from TIM3
 		{
 			Sequencer();  /// periodically call sequencer
 		}
+		
+	if (htim->Instance==TIM16) //check if the interrupt comes from TIM3
+		{
+			LED_UpdateIntensity();  /// periodically call sequencer
+		}
+
 }
 
 
