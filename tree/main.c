@@ -1,5 +1,6 @@
 #include "stm32f0xx.h"                  // Device header
 #include "leds.h"
+#include <stdlib.h>
 
 
 extern void LEDS_Test(uint8_t r, uint8_t c); 
@@ -38,12 +39,10 @@ int main(void)
 	r=1;
 	while (1)
 	{
-		for (c=0; c<16; c++)
-		{
-			LEDS_Test(r,c);
-			Delay(10000);
-			r <<= 1; if ((r==0) | (r>0xf)) r =1;
-		}
+		c = (uint8_t)(rand() % 0x0f);
+		LEDS_Test(r,c);
+		Delay(10000);
+		r <<= 1; if ((r==0) | (r>0xf)) r =1;
 	}
 	
 }
